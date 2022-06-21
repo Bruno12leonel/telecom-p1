@@ -28,21 +28,18 @@ class Modem:
             for i in range(self.fs//300):
                 phi += omega/self.fs
                 self.y.append(np.sin(phi))
-        
 
     def get_samples(self):
-        iterator = 0
-        for amostra in self.y:
-            if iterator<self.bufsz:
-                self.amostras.append(amostra)
-            iterator=iterator+1
-        return np.array(self.amostras)
+        if not self.y: self.y = [1] * self.bufsz
+        res = self.y[0:self.bufsz]
+        self.y = self.y[self.bufsz:]
+        return res
         #return np.zeros(self.bufsz)
 
     # Demodulação
 
     def put_samples(self, data):
-        
+        pass
 
     def get_bits(self):
         return []
