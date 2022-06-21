@@ -5,7 +5,6 @@ class Modem:
     def __init__(self, fs, bufsz, ans=False):
         self.fs = fs  # taxa de amostragem
         self.bufsz = bufsz  # quantidade de amostas que devem ser moduladas por vez
-
         # frequências de modulação (upload)
         self.tx_omega0 = 2*np.pi*(1080 + 100)
         self.tx_omega1 = 2*np.pi*(1080 - 100)
@@ -21,7 +20,13 @@ class Modem:
     # Modulação
 
     def put_bits(self, bits):
-        pass
+        y = []
+        for bit in bits:
+            omega = 2*np.pi*(1180 if bit==0 else 980)
+            for i in range(self.fs//300):
+                phi += omega/self.fs
+                y.append(np.sin(phi))
+        return np.array(y)
 
     def get_samples(self):
         return np.zeros(self.bufsz)
