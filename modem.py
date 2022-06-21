@@ -1,9 +1,11 @@
 import numpy as np
-
+import matplotlib.plt as plt
+from matplotlib.pyplot import plot
 
 class Modem:
     def __init__(self, fs, bufsz, ans=False):
         self.fs = fs  # taxa de amostragem
+        self.amostras = []
         self.bufsz = bufsz  # quantidade de amostas que devem ser moduladas por vez
         # frequências de modulação (upload)
         self.tx_omega0 = 2*np.pi*(1080 + 100)
@@ -11,6 +13,7 @@ class Modem:
         # frequências de demodulação (download)
         self.rx_omega0 = 2*np.pi*(1750 + 100)
         self.rx_omega1 = 2*np.pi*(1750 - 100)
+        self.y = []
         # se o modem estiver atendendo uma ligação
         if ans:
             # inverte as frequências
@@ -20,21 +23,26 @@ class Modem:
     # Modulação
 
     def put_bits(self, bits):
-        y = []
         for bit in bits:
             omega = 2*np.pi*(1180 if bit==0 else 980)
             for i in range(self.fs//300):
                 phi += omega/self.fs
-                y.append(np.sin(phi))
-        return np.array(y)
+                self.y.append(np.sin(phi))
+        
 
     def get_samples(self):
-        return np.zeros(self.bufsz)
+        iterator = 0
+        for amostra in self.y:
+            if iterator<self.bufsz:
+                self.amostras.append(amostra)
+            iterator=iterator+1
+        return np.array(self.amostras)
+        #return np.zeros(self.bufsz)
 
     # Demodulação
 
     def put_samples(self, data):
-        pass
+        
 
     def get_bits(self):
         return []
