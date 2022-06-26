@@ -21,6 +21,7 @@ class Modem:
     # Modulação
 
     def put_bits(self, bits):
+        phi = 0
         for bit in bits:
             omega = 2*np.pi*(1180 if bit==0 else 980)
             for i in range(self.fs//300):
