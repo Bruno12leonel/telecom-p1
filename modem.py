@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-#from matplotlib.pyplot import plot
 
 class Modem:
     def __init__(self, fs, bufsz, ans=False):
