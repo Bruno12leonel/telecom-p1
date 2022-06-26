@@ -27,6 +27,7 @@ class Modem:
             for i in range(self.fs//300):
                 phi += omega/self.fs
                 self.y.append(np.sin(phi))
+        self.y = np.array(self.y)
 
     def get_samples(self):
         if not self.y: self.y = [1] * self.bufsz
