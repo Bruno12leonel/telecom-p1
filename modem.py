@@ -33,6 +33,7 @@ class Modem:
         if not self.y: self.y = [1] * self.bufsz
         res = self.y[0:self.bufsz]
         self.y = self.y[self.bufsz:]
+        
         return res
         #return np.zeros(self.bufsz)
 
