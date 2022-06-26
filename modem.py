@@ -12,7 +12,6 @@ class Modem:
         self.rx_omega0 = 2*np.pi*(1750 + 100)
         self.rx_omega1 = 2*np.pi*(1750 - 100)
         self.y = []
-        self.k = []
         # se o modem estiver atendendo uma ligação
         if ans:
             # inverte as frequências
