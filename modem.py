@@ -19,7 +19,6 @@ class Modem:
             self.tx_omega1, self.rx_omega1 = self.rx_omega1, self.tx_omega1
 
     # Modulação
-    #teste
 
     def put_bits(self, bits):
         phi = 0
