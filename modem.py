@@ -1,6 +1,5 @@
 from random import sample
 import numpy as np
-import matplotlib.pyplot as plt
 
 class Modem:
     def __init__(self, fs, bufsz, ans=False):        
