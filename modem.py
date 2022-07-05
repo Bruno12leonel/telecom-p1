@@ -17,7 +17,7 @@ class Modem:
         self.amostras = []
         self.phi = 0
         self.data = []
-
+        ##
         if ans:
             # inverte as frequências
             self.tx_omega0, self.rx_omega0 = self.rx_omega0, self.tx_omega0
