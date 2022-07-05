@@ -1,6 +1,8 @@
 from random import sample
+from this import d
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import signal
 
 class Modem:
     def __init__(self, fs, bufsz, ans=False):        
@@ -16,7 +18,7 @@ class Modem:
         
         self.amostras = []
         self.phi = 0
-        self.data = []
+        self.data = self.bufsz*[0]
         ##
         if ans:
             # inverte as frequências
@@ -63,16 +65,18 @@ class Modem:
             v0r[n] = s[n] - r**L * np.cos(self.rx_omega0*L*T)*s[n-L] + r*np.cos(self.rx_omega0*T)*v0r[n-1] - r*np.sin(self.rx_omega0*T)*v0i[n-1]
             v0i[n] = -r**L*np.sin(self.rx_omega0*L*T)*s[n-L] + r*np.cos(self.rx_omega0*T)*v0i[n-1] + r*np.sin(self.rx_omega0*T)*v0r[n-1]
             v1r[n] = s[n] - r**L * np.cos(self.rx_omega1*L*T)*s[n-L] + r*np.cos(self.rx_omega1*T)*v1r[n-1] - r*np.sin(self.rx_omega1*T)*v1i[n-1]
-            v1i[n] = -r**L*np.sin(self.rx_omega1*L*T)*s[n-L] + r*np.cos(self.rx_omega1*T)*v1i[n-1] + r*np.sin(self.rx_omega1*T)*v1r[n-1]
-        
-            rho = v1r**2+v1i**2+v0r**2+v0i**2   # carrier detection
+            v1i[n] = -r**L*np.sin(self.rx_omega1*L*T)*s[n-L] + r*np.cos(self.rx_omega1*T)*v1i[n-1] + r*np.sin(self.rx_omega1*T)*v1r[n-1]            
 
             c = abs(v1r**2+v1i**2-v0r**2-v0i**2)
             v = np.zeros(len(c))
             y = np.zeros(len(c))
-            r=0.9999
+            
+            r = 0.9999
+
+            filt = signal.firwin(40, 300, pass_zero='lowpass', fs=48000)
             for n in range(1,len(s)):
                 v[n] = (1-r)*c[n] + 2*r*np.cos(2*np.pi*300/self.fs)*v[n-1] - r**2*v[n-2]
                 y[n] = v[n] - v[n-2]
-
-        return y
+                if y[n-1] < 0 and y[n] >= 0:
+                    contador = 46*self.fs//48000
+            return y
