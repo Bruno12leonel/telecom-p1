@@ -61,7 +61,7 @@ class Modem:
         count = 46*self.fs//48000
         L = self.bufsz
         T = 1/self.fs
-        r = 0.99
+        r = 0.999
 
         for n in range(1,len(s)):
             v0r[n] = s[n] - r**L * np.cos(self.rx_omega0*L*T)*s[n-L] + r*np.cos(self.rx_omega0*T)*v0r[n-1] - r*np.sin(self.rx_omega0*T)*v0i[n-1]
@@ -72,13 +72,21 @@ class Modem:
         c = abs(v1r**2+v1i**2-v0r**2-v0i**2)                   
         v = np.zeros(len(c))
         y = np.zeros(len(c))
-            
-        for n in range(L,len(s)):
+        d = v1r**2+v1i**2-v0r**2-v0i**2    
+        for n in range(1,len(s)):
             v[n] = (1-r)*c[n] + 2*r*np.cos(2*np.pi*300/self.fs)*v[n-1] - r**2*v[n-2]
             y[n] = v[n] - v[n-2]
+            
 
         filt = signal.firwin(40, 300, pass_zero='lowpass', fs= self.fs)
-        amostra = v1r**2+v1i**2-v0r**2-v0i**2
+        amostra = 1*((y[1:]<0)&(y[:-1]>=0))
+        for i in range(len(amostra)):
+            if amostra[i] != 0:
+                self.bits.append(1 if d[i] > 0 else 0)
+        
+
+        '''
+        
 
         convolvedArr = np.convolve(amostra, filt)
         for i in range(1,len(y),1):
@@ -87,7 +95,6 @@ class Modem:
                     self.bits.append(1 if convolvedArr[i + count] > 0 else 0)
                 else:    
                     self.bits.append(1 if convolvedArr[-1] > 0 else 0)
-        self.data = self.data[L:]
-    
-            
+        self.data = self.data[L:]            
+        '''
         return self.bits
