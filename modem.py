@@ -83,20 +83,8 @@ class Modem:
         amostra = 1*((y[1:]<0)&(y[:-1]>=0))
         for i in range(len(amostra)):
             if amostra[i] != 0:
-                self.bits.append(1 if d[i] > 0 else 0)
-        
+                self.bits.append(1 if d[i] > 0 else 0)      
 
-        '''
         
-
-        convolvedArr = np.convolve(amostra, filt)
-        for i in range(1,len(y),1):
-            if y[i-1]<0 and y[i]>=0:
-                if len(convolvedArr) > i + count:                                        
-                    self.bits.append(1 if convolvedArr[i + count] > 0 else 0)
-                else:    
-                    self.bits.append(1 if convolvedArr[-1] > 0 else 0)
-        self.data = self.data[L:]            
-        '''
         self.buffer = s[:L]
         return self.bits
