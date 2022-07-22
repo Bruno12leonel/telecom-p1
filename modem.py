@@ -67,7 +67,7 @@ class Modem:
         s = np.concatenate((self.buffer,self.data))        
         L = self.bufsz
         T = 1/self.fs
-        r = 0.9999
+        r = 0.99999
         bits = []
 
         #depois do quarto teste ele passa a ser de 320 o len(s)
