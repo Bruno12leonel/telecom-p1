@@ -86,18 +86,14 @@ class Modem:
 
             if self.counter_state == 'running':
                 self.listD.append(v1r**2+v1i**2-v0r**2-v0i**2)
-
+                self.counter -= 1
             if self.counter_state == 'idle' and (y >= 0) and (self.yant < 0):
                 self.counter = 46*48000//self.fs
                 self.listD = []
                 self.counter_state = 'running'               
             elif self.counter_state == 'running' and self.counter == 0:
-                bits.append(1 if np.dot(self.filt,self.listD[-40:]) > 0 else 0)
-                #self.bits.append(1 if v1r**2+v1i**2-v0r**2-v0i**2 > 0 else 0)
-                self.counter_state = 'idle'
-            elif self.counter_state == 'running':
-                self.counter -= 1
-                
+                bits.append(1 if np.dot(self.filt,self.listD[-40:]) > 0 else 0)                
+                self.counter_state = 'idle'              
 
             self.vorAnterior = v0r
             self.voiAnterior = v0i
